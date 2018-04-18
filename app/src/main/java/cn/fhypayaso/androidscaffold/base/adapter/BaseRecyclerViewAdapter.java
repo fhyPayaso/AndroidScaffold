@@ -16,7 +16,8 @@ import java.util.List;
  * email fanhongyu@hrsoft.net.
  */
 
-public abstract class BaseRecyclerViewAdapter<Data> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder<Data>> {
+public abstract class BaseRecyclerViewAdapter<Data> extends RecyclerView.Adapter<BaseRecyclerViewAdapter
+        .BaseViewHolder<Data>> {
 
 
     private List<Data> mDataList;

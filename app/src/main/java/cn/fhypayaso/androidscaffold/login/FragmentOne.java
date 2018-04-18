@@ -13,7 +13,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.fhypayaso.androidscaffold.R;
+import cn.fhypayaso.androidscaffold.base.adapter.BaseQuickAdapter;
 import cn.fhypayaso.androidscaffold.base.fragment.BaseFragment;
+import cn.fhypayaso.androidscaffold.utils.ToastUtil;
 
 /**
  * @author FanHongyu.
@@ -52,6 +54,13 @@ public class FragmentOne extends BaseFragment {
         }
         mFragmentOneRecAdapter = new FragmentOneRecAdapter(loginModels, getContext(), R.layout.item_rec);
         mFragmentOneRecAdapter.setRecyclerView(recView);
+        mFragmentOneRecAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+                ToastUtil.showToast("点击了" + position);
+            }
+        });
     }
 
 

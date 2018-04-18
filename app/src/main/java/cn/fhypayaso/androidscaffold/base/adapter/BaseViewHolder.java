@@ -36,6 +36,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
 
+
     /**
      * 从布局获取泛型view
      *
@@ -112,5 +113,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder setGone(@IdRes int viewId) {
         findViewById(viewId).setVisibility(View.GONE);
         return this;
+    }
+
+    public View getItemView() {
+        return mItemView;
     }
 }

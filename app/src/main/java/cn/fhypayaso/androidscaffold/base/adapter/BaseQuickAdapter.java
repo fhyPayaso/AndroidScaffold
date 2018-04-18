@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,6 +25,9 @@ public abstract class BaseQuickAdapter<Data> extends RecyclerView.Adapter<BaseVi
     protected LayoutInflater mInflater;
     protected int mItemLayoutId;
     private RecyclerView mRecyclerView;
+
+
+    private OnItemClickListener mOnItemClickListener;
 
 
     public BaseQuickAdapter(List<Data> dataList, Context context, @LayoutRes int itemLayoutId) {
@@ -44,8 +48,21 @@ public abstract class BaseQuickAdapter<Data> extends RecyclerView.Adapter<BaseVi
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(mItemLayoutId, parent, false);
-        return new BaseViewHolder(mContext, view);
+
+        final BaseViewHolder holder = new BaseViewHolder(mContext, view);
+
+        //在创建viewHolder时候就设置点击事件
+        if (mOnItemClickListener != null) {
+            holder.getItemView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemClick(v, holder.getAdapterPosition());
+                }
+            });
+        }
+        return holder;
     }
+
 
     @Override
     public int getItemCount() {
@@ -58,4 +75,66 @@ public abstract class BaseQuickAdapter<Data> extends RecyclerView.Adapter<BaseVi
         mRecyclerView.setAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
     }
+
+
+    /**
+     * 添加数据
+     *
+     * @param data
+     */
+    public void addItem(Data data) {
+        mDataList.add(data);
+        notifyDataSetChanged();
+    }
+
+
+    /**
+     * @param collection
+     */
+    public void addItems(Collection<Data> collection) {
+        mDataList.addAll(collection);
+        notifyDataSetChanged();
+    }
+
+
+    /**
+     * 移除数据
+     */
+    public void removeItem(Data data) {
+
+        int position = mDataList.indexOf(data);
+        mDataList.remove(data);
+        //该方法不会使position及其之后位置的itemView重新onBindViewHolder
+        notifyItemRemoved(position);
+        //所以需要从position到列表末尾进行数据刷新
+        if (position != mDataList.size()) {
+            notifyItemRangeChanged(position, mDataList.size() - position);
+        }
+    }
+
+
+    /**
+     * 清除全部数据
+     */
+    public void removeAllItem() {
+        mDataList.clear();
+        notifyDataSetChanged();
+    }
+
+
+    public interface OnItemClickListener {
+
+        /**
+         * 点击事件回调
+         *
+         * @param view
+         * @param position
+         */
+        public void onItemClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
+    }
+
 }
