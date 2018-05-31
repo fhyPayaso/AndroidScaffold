@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import cn.fhypayaso.androidscaffold.App;
 
+
 /**
  * @author FanHongyu.
  * @since 18/4/14 12:03.

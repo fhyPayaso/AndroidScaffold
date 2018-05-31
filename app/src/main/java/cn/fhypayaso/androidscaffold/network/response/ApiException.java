@@ -1,5 +1,7 @@
 package cn.fhypayaso.androidscaffold.network.response;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.IOException;
 
 /**
@@ -12,12 +14,22 @@ import java.io.IOException;
 
 public class ApiException extends IOException {
 
+    /**
+     * 错误码
+     */
+    @SerializedName("code")
     private int code;
-    private String message;
+
+    /**
+     * 错误信息
+     */
+    @SerializedName("message")
+    private String msg;
+
 
     public ApiException(int code, String msg) {
         this.code = code;
-        this.message = msg;
+        this.msg = msg;
     }
 
     public int getCode() {
@@ -29,10 +41,10 @@ public class ApiException extends IOException {
     }
 
     public String getMsg() {
-        return message;
+        return msg;
     }
 
     public void setMsg(String msg) {
-        this.message = msg;
+        this.msg = msg;
     }
 }

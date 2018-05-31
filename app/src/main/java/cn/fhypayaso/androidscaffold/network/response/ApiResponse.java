@@ -1,5 +1,7 @@
 package cn.fhypayaso.androidscaffold.network.response;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * 正确响应体
  *
@@ -10,14 +12,24 @@ package cn.fhypayaso.androidscaffold.network.response;
 
 public class ApiResponse<T> {
 
+    /**
+     * 状态码
+     */
+    @SerializedName("code")
+    private int code;
 
-    /** 返回码 */
-    private int code = -2;
+    /**
+     * 返回信息
+     */
+    @SerializedName("message")
+    private String msg;
 
-    /** 返回信息 */
-    private String message = "";
-    /** 返回数据 */
+    /**
+     * 返回具体数据
+     */
+    @SerializedName("data")
     private T data;
+
 
     public int getCode() {
         return code;
@@ -27,12 +39,12 @@ public class ApiResponse<T> {
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public T getData() {

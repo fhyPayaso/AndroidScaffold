@@ -1,6 +1,7 @@
 package cn.fhypayaso.androidscaffold.base.adapter;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +12,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import cn.fhypayaso.androidscaffold.App;
-import cn.fhypayaso.androidscaffold.R;
-
 /**
  * @author FanHongyu.
- * @since 18/4/17 14:25.
+ * @since 18/4/23 18:11.
  * email fanhongyu@hrsoft.net.
  */
 
@@ -34,7 +32,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         mItemView = itemView;
         mViewSparseArray = new SparseArray<>();
     }
-
 
 
     /**
@@ -71,7 +68,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public BaseViewHolder setText(@IdRes int viewId, String value) {
         TextView textView = findViewById(viewId);
-        textView.setText(value == null ? mContext.getString(R.string.empty) : value);
+        textView.setText(value == null ? "" : value);
         return this;
     }
 
@@ -93,6 +90,19 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
 
     /**
+     * 设置ImageView的url
+     *
+     * @param viewId
+     * @return
+     */
+    public BaseViewHolder setImgRes(@IdRes int viewId, @DrawableRes int drawableId) {
+        ImageView imageView = findViewById(viewId);
+        imageView.setImageResource(drawableId);
+        return this;
+    }
+
+
+    /**
      * 设置控件是否可见
      *
      * @param viewId
@@ -104,7 +114,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-
     /**
      * 设置控件是否消失(不保留空间)
      *
@@ -115,7 +124,34 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    /**
+     * 获取item的View
+     *
+     * @return
+     */
     public View getItemView() {
         return mItemView;
     }
+
+    /**
+     * 获取item内部的view
+     *
+     * @param viewId
+     * @return
+     */
+    public View getViewById(@IdRes int viewId) {
+        return findViewById(viewId);
+    }
+
+
+    /**
+     * 获取当前viewHolder位置
+     *
+     * @return
+     */
+    public int getViewHolderPosition() {
+        return getAdapterPosition();
+    }
+
+
 }

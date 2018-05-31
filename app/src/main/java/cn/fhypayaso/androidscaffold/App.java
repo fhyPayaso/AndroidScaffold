@@ -2,16 +2,25 @@ package cn.fhypayaso.androidscaffold;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
+
+
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.fhypayaso.androidscaffold.utils.CacheUtil;
 import cn.fhypayaso.androidscaffold.utils.ToastUtil;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * @author FanHongyu.
- * @since 18/4/13 20:27.
+ * @since 18/4/23 17:48.
  * email fanhongyu@hrsoft.net.
  */
 
@@ -31,12 +40,26 @@ public class App extends Application {
         super.onCreate();
         sInstance = this;
         registerActivityLifecycleCallbacks(getActivityLifecycleCallbacks());
+
+
+        //内存泄漏检测工具
+        if (BuildConfig.DEBUG) {
+            LeakCanary.install(this);
+        }
+
+        Log.i(TAG, "onCreate: ");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+            builder.detectFileUriExposure();
+        }
     }
 
     public static App getInstance() {
         return sInstance;
-
     }
+
 
     private ActivityLifecycleCallbacks getActivityLifecycleCallbacks() {
 
@@ -129,6 +152,6 @@ public class App extends Application {
      */
     public void exitAccount() {
         removeAllActivity();
-        // TODO: 18/4/12 进入登录界面,清除缓存
+        CacheUtil.clear();
     }
 }

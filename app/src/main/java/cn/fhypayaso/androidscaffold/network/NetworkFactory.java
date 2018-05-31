@@ -1,14 +1,13 @@
 package cn.fhypayaso.androidscaffold.network;
 
-
-import android.util.Log;
-
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-
+import cn.fhypayaso.androidscaffold.App;
+import cn.fhypayaso.androidscaffold.common.CacheKey;
 import cn.fhypayaso.androidscaffold.common.Config;
 import cn.fhypayaso.androidscaffold.network.converter.ResponseConverterFactory;
+import cn.fhypayaso.androidscaffold.utils.CacheUtil;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,20 +16,18 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * @author FanHongyu.
  * @since 18/1/18 15:48.
  * email fanhongyu@hrsoft.net.
  */
 
-public final class ApiFactory {
+public final class NetworkFactory {
 
 
     private static OkHttpClient sOkHttpClient;
     private static Retrofit sRetrofit;
-    private static ApiService sRetrofitService;
+    private static ApiService sApiService;
 
 
     /**
@@ -38,12 +35,11 @@ public final class ApiFactory {
      *
      * @return RetrofitService
      */
-    public static ApiService getRetrofitService() {
-
-        if (sRetrofitService == null) {
-            sRetrofitService = getRetrofit().create(ApiService.class);
+    public static ApiService getService() {
+        if (sApiService == null) {
+            sApiService = getRetrofit().create(ApiService.class);
         }
-        return sRetrofitService;
+        return sApiService;
     }
 
 
@@ -96,30 +92,18 @@ public final class ApiFactory {
 
 
     /**
-     * 自定义网络拦截器
+     * 自定义网络拦截器,添加token请求头
      *
      * @return Interceptor
      */
     private static Interceptor getNetworkInterceptor() {
-
         return new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
-
-                //获取本地缓存的token
-                String token = "";
-                Log.i(TAG, "intercept: " + token);
-
-                /**
-                 * 防止空指针
-                 */
-                if (token == null) {
-                    token = "token";
-                }
-                // TODO: 18/1/18 token安全性问题
+                String token = CacheUtil.getSP().getString(CacheKey.TOKEN, "");
                 //请求时加入token
                 Request request = chain.request().newBuilder()
-                        .header("token", token)
+                        .header(CacheKey.TOKEN, token)
                         .build();
                 return chain.proceed(request);
             }

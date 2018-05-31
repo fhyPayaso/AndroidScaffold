@@ -7,6 +7,17 @@ package cn.fhypayaso.androidscaffold.common;
  */
 
 public class CacheKey {
+
     public static final String TOKEN = "token";
-    public static final String USER = "user";
+
+    /**
+     * app信息
+     */
+    public static final String APP_INFORMATION = "appInformation";
+
+
+    /**
+     * 用户基本信息
+     */
+    public static final String USER_INFO = "userInfo";
 }

@@ -10,9 +10,21 @@ public class Config {
 
 
     /**
+     * 当前app版本号
+     */
+    public static final String APP_VERSION = "1.0.3";
+
+
+    /**
      * 网络请求BaseURL
      */
-    public static final String APP_SERVER_BASE_URL = "";
+    public static final String APP_SERVER_BASE_URL = "http://taskgobe.sealbaby.cn/";
+
+
+    /**
+     * 是否为测试版本
+     */
+    public static final boolean DEBUG = false;
 
 
     /**
@@ -20,5 +32,10 @@ public class Config {
      */
     public static final int APP_SERVER_CONNECT_TIME_OUT = 15;
 
+
+    /**
+     * 正确返回码
+     */
+    public static final int[] NET_CORRECT_CODE = {1000, 2000, 3000, 4000};
 
 }

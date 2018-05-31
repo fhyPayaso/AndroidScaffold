@@ -11,14 +11,13 @@ import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import cn.fhypayaso.androidscaffold.R;
-import cn.fhypayaso.androidscaffold.base.presenter.BaseContract;
+import cn.fhypayaso.androidscaffold.utils.InjectUtil;
 import cn.fhypayaso.androidscaffold.utils.ThreadUtil;
 import cn.fhypayaso.androidscaffold.utils.ToastUtil;
 
 /**
  * @author FanHongyu.
- * @since 18/4/15 19:59.
+ * @since 18/4/23 18:08.
  * email fanhongyu@hrsoft.net.
  */
 
@@ -41,7 +40,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
             savedInstanceState) {
-        mView = inflater.inflate(getLayoutId(), container, false);
+        mView = inflater.inflate(InjectUtil.getContentViewId(getContext()), container, false);
         unbinder = ButterKnife.bind(this, mView);
         initFragment();
         return mView;
@@ -52,14 +51,6 @@ public abstract class BaseFragment extends Fragment {
         initData();
         initView();
     }
-
-    /**
-     * 获取LayoutId.
-     *
-     * @return LayoutId 布局文件Id
-     */
-    @LayoutRes
-    protected abstract int getLayoutId();
 
     /**
      * 初始化View.
@@ -80,8 +71,9 @@ public abstract class BaseFragment extends Fragment {
     public void showProgressDialog() {
 
         if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(getContext(), ProgressDialog.STYLE_SPINNER);
-            mProgressDialog.setTitle(R.string.dialog_please_wait);
+            mProgressDialog = new ProgressDialog(getContext());
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.setMessage("请稍后...");
         }
 
         ThreadUtil.runOnUiThread(new Runnable() {
@@ -94,15 +86,14 @@ public abstract class BaseFragment extends Fragment {
 
 
     public void dismissProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-
-            ThreadUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+        ThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
-            });
-        }
+            }
+        });
     }
 
     /**
@@ -112,5 +103,12 @@ public abstract class BaseFragment extends Fragment {
      */
     protected View getRootView() {
         return mView;
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        unbinder.unbind();
+        super.onDestroyView();
     }
 }

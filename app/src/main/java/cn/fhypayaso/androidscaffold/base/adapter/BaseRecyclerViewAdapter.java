@@ -1,45 +1,124 @@
 package cn.fhypayaso.androidscaffold.base.adapter;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.Collection;
 import java.util.List;
 
+import cn.fhypayaso.androidscaffold.R;
+
 /**
- * RecyclerViewAdapter基类
- *
- * @author FanHongyu.
- * @since 18/4/15 19:34.
- * email fanhongyu@hrsoft.net.
+ * @author fhyPayaso
+ * @since 2018/4/30 on 上午11:41
+ * fhyPayaso@qq.com
  */
-
-public abstract class BaseRecyclerViewAdapter<Data> extends RecyclerView.Adapter<BaseRecyclerViewAdapter
-        .BaseViewHolder<Data>> {
+public abstract class BaseRecyclerViewAdapter<Data> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-    private List<Data> mDataList;
+    public static final int ITEM_NORMAL = 1000;
+    public static final int ITEM_FOOTER = 1001;
+
+    protected List<Data> mDataList;
     protected Context mContext;
     protected LayoutInflater mInflater;
-    private OnItemClicked<Data> onItemClickedListener;
+    protected int mItemLayoutId;
+    private boolean mWithFooter = false;
+    private FooterViewHolder mFooterViewHolder;
+    private OnItemClickListener mOnItemClickListener;
 
 
-    public BaseRecyclerViewAdapter(Context context, List<Data> dataList) {
-        this.mContext = context;
+    public BaseRecyclerViewAdapter(List<Data> dataList, Context context, @LayoutRes int itemLayoutId) {
         mDataList = dataList;
-        mInflater = LayoutInflater.from(context);
+        mContext = context;
+        mInflater = LayoutInflater.from(mContext);
+        mItemLayoutId = itemLayoutId;
+    }
+
+    @Override
+    public int getItemCount() {
+        return mWithFooter ? mDataList.size() + 1 : mDataList.size();
     }
 
 
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+
+        //如果是footer类型渲染底部布局
+        if (viewType == ITEM_FOOTER) {
+            View footerView = mInflater.inflate(R.layout.item_recycler_footer, parent, false);
+            mFooterViewHolder = new FooterViewHolder(footerView);
+            return mFooterViewHolder;
+        }
+
+
+        final View view = mInflater.inflate(mItemLayoutId, parent, false);
+        BaseViewHolder viewHolder = new BaseViewHolder(mContext, view);
+        final int position = viewHolder.getAdapterPosition();
+        if (mOnItemClickListener != null) {
+            viewHolder.getItemView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemClick(view, mDataList.get(position), position);
+                }
+            });
+        }
+        return viewHolder;
+    }
+
+
+    @Override
+    public int getItemViewType(int position) {
+
+
+        //如果需要底部footer
+        if (mWithFooter) {
+
+            //如果是footerView
+            if (position >= mDataList.size()) {
+                return ITEM_FOOTER;
+            } else {
+                return ITEM_NORMAL;
+            }
+        } else {
+            return ITEM_NORMAL;
+        }
+    }
+
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder.getItemViewType() == ITEM_NORMAL) {
+            bindView((BaseViewHolder) holder, mDataList.get(position));
+        } else if (holder.getItemViewType() == ITEM_FOOTER) {
+            ((FooterViewHolder) holder).setLoadVisibility(false);
+        }
+    }
+
     /**
-     * 设置数据
+     * 绑定item中的view和数据
+     *
+     * @param viewHolder
+     * @param item
+     */
+    protected abstract void bindView(BaseViewHolder viewHolder, Data item);
+
+
+    /**
+     * 重新设置数据
      *
      * @param data 数据
      */
-    public void setDataList(Collection<Data> data) {
+    public void reSetDataList(Collection<Data> data) {
         this.mDataList.clear();
+        notifyDataSetChanged();
         this.mDataList.addAll(data);
         notifyDataSetChanged();
     }
@@ -52,32 +131,25 @@ public abstract class BaseRecyclerViewAdapter<Data> extends RecyclerView.Adapter
     }
 
 
-    @Override
-    public int getItemCount() {
-        return mContext == null ? 0 : mDataList.size();
-    }
-
-
     /**
-     * 添加一条数据
+     * 添加数据
      *
-     * @param data 添加的数据
+     * @param data
      */
     public void addItem(Data data) {
-        this.mDataList.add(data);
-        //每次更改数据之后刷新RecyclerView
+        mDataList.add(data);
         notifyDataSetChanged();
     }
 
+
     /**
-     * 添加多条数据
-     *
-     * @param collection 数据
+     * @param collection
      */
     public void addItems(Collection<Data> collection) {
-        this.mDataList.addAll(collection);
+        mDataList.addAll(collection);
         notifyDataSetChanged();
     }
+
 
     /**
      * 移除数据
@@ -89,13 +161,13 @@ public abstract class BaseRecyclerViewAdapter<Data> extends RecyclerView.Adapter
         notifyDataSetChanged();
     }
 
+
     /**
-     * 移除数据（带动画）
-     *
-     * @param position pos
+     * 移除数据
      */
     public void removeItem(int position) {
-        this.mDataList.remove(position);
+
+        mDataList.remove(position);
         //该方法不会使position及其之后位置的itemView重新onBindViewHolder
         notifyItemRemoved(position);
         //所以需要从position到列表末尾进行数据刷新
@@ -104,75 +176,60 @@ public abstract class BaseRecyclerViewAdapter<Data> extends RecyclerView.Adapter
         }
     }
 
+
     /**
-     * 清空列表
+     * 清除全部数据
      */
-    public void clearAllItems() {
-        this.mDataList.clear();
+    public void removeAllItem() {
+        mDataList.clear();
         notifyDataSetChanged();
     }
 
 
     /**
-     * 获取position 处数据
+     * 设置是否需要上拉加载更多
+     *
+     * @param withFooter
      */
-    public Data getItem(int position) {
-        return mDataList.get(position);
+    public void setWithFooter(boolean withFooter) {
+        mWithFooter = withFooter;
     }
 
 
-    public abstract static class BaseViewHolder<Data> extends RecyclerView.ViewHolder {
-
-        private Data mData;
-
-        public BaseViewHolder(View itemView) {
-            super(itemView);
-        }
-
-        public void bind(Data data, int position) {
-            mData = data;
-            onBind(data, position);
-        }
+    public interface OnItemClickListener<Data> {
 
         /**
-         * 绑定model和layout数据
+         * 点击事件回调
          *
-         * @param data
+         * @param view
          * @param position
          */
-        protected abstract void onBind(Data data, int position);
+        public void onItemClick(View view, Data data, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
 
-    @Override
-    public void onBindViewHolder(final BaseViewHolder<Data> holder, final int position) {
-
-        //监听点击事件
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onItemClickedListener != null) {
-                    onItemClickedListener.onItemClicked(mDataList.get(position), holder);
-                }
-            }
-        });
-        //ViewHolder绑定数据
-        holder.bind(mDataList.get(position), position);
+    public void showFooterVisibility(boolean isShow) {
+        mFooterViewHolder.setLoadVisibility(isShow);
     }
+
 
     /**
-     * 点击事件接口
+     * 上拉加载更多底部ViewHolder
      */
-    public interface OnItemClicked<Data> {
+    public class FooterViewHolder extends RecyclerView.ViewHolder {
+        ProgressBar mFooterProgressBar;
 
-        void onItemClicked(Data data, BaseViewHolder holder);
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            mFooterProgressBar = (ProgressBar) itemView.findViewById(R.id.progress_footer);
+        }
+
+        void setLoadVisibility(boolean show) {
+            mFooterProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
     }
-
-    /**
-     * 设置点击事件监听
-     */
-    public void setOnItemClickedListener(OnItemClicked<Data> onItemClickedListener) {
-        this.onItemClickedListener = onItemClickedListener;
-    }
-
 }

@@ -7,16 +7,15 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
-import cn.fhypayaso.androidscaffold.App;
-import cn.fhypayaso.androidscaffold.R;
-import cn.fhypayaso.androidscaffold.base.presenter.BaseContract;
+import cn.fhypayaso.androidscaffold.utils.InjectUtil;
 import cn.fhypayaso.androidscaffold.utils.ThreadUtil;
 import cn.fhypayaso.androidscaffold.utils.ToastUtil;
 
 /**
  * @author FanHongyu.
- * @since 18/4/14 13:19.
+ * @since 18/4/23 17:53.
  * email fanhongyu@hrsoft.net.
  */
 
@@ -35,25 +34,16 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        removeFragmentState(savedInstanceState);
         super.onCreate(savedInstanceState);
+        //禁止应用横屏
         allowScreenHorizontal(false);
-        setContentView(getLayoutId());
-        initActivity(savedInstanceState);
     }
 
     protected void initActivity(Bundle savedInstanceState) {
         initData(savedInstanceState);
         initView();
     }
-
-    /**
-     * 获取父布局
-     *
-     * @return
-     */
-    @LayoutRes
-    protected abstract int getLayoutId();
-
 
     /**
      * 加载数据
@@ -106,7 +96,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 简单类型的ProgressDialog
      */
     public void showProgressDialog() {
-        showProgressDialog(App.getInstance().getResources().getString(R.string.empty));
+        showProgressDialog("请稍后...");
     }
 
 
@@ -115,6 +105,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.setMessage(msg);
+
         }
         ThreadUtil.runOnUiThread(new Runnable() {
             @Override
@@ -128,16 +119,14 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 隐藏ProgressDialog
      */
     public void dismissProgressDialog() {
-
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-            ThreadUtil.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+        ThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
-            });
-        }
+            }
+        });
     }
 
     /**
@@ -154,5 +143,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         dismissProgressDialog();
         super.onDestroy();
+    }
+
+
+    /**
+     * 清除fragment状态
+     *
+     * @param savedInstanceState
+     */
+    protected void removeFragmentState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            savedInstanceState.remove("android:support:fragments");
+            savedInstanceState.remove("android:fragments");
+        }
     }
 }

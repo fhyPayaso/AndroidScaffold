@@ -12,12 +12,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import cn.fhypayaso.androidscaffold.R;
 
+
+import butterknife.ButterKnife;
+import cn.fhypayaso.androidscaffold.R;
+import cn.fhypayaso.androidscaffold.utils.InjectUtil;
 
 /**
  * @author FanHongyu.
- * @since 18/4/15 20:52.
+ * @since 18/4/23 17:57.
  * email fanhongyu@hrsoft.net.
  */
 
@@ -30,6 +33,7 @@ public abstract class BaseToolBarActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getToolbarView());
+        ButterKnife.bind(this);
         initActivity(savedInstanceState);
     }
 
@@ -43,7 +47,7 @@ public abstract class BaseToolBarActivity extends BaseActivity {
         LayoutInflater inflater = getLayoutInflater();
         RelativeLayout viewRoot = (RelativeLayout) inflater.inflate(R.layout.view_base_toolbar, null);
         FrameLayout viewContainer = viewRoot.findViewById(R.id.view_container);
-        viewContainer.addView(inflater.inflate(getLayoutId(), null));
+        viewContainer.addView(inflater.inflate(InjectUtil.getContentViewId(this), null));
         initToolbar(viewRoot);
         return viewRoot;
     }
@@ -122,7 +126,7 @@ public abstract class BaseToolBarActivity extends BaseActivity {
      *
      * @param resId
      */
-    protected void setToolBarMenu(int resId,View.OnClickListener onClickListener) {
+    protected void setToolBarMenu(int resId, View.OnClickListener onClickListener) {
         if (mToolBar != null) {
             ImageView imageView = mToolBar.findViewById(R.id.img_toolbar_menu);
             imageView.setImageResource(resId);
