@@ -23,14 +23,12 @@ import static android.content.ContentValues.TAG;
 public abstract class BaseObserver<T> implements Observer<ApiResponse<T>> {
 
 
-    public abstract void onSuccess(ApiResponse<T> response);
+    protected abstract void onSuccess(ApiResponse<T> response);
 
-    public abstract void onError(ApiException exception);
-
+    protected abstract void onError(ApiException exception);
 
     @Override
     public void onNext(ApiResponse<T> response) {
-
         boolean isCodeTrue = false;
         for (int code : Config.NET_CORRECT_CODE) {
             if (code == response.getCode()) {
@@ -41,7 +39,6 @@ public abstract class BaseObserver<T> implements Observer<ApiResponse<T>> {
         }
         //错误返回码
         if (!isCodeTrue) {
-
             onError(new ApiException(response.getCode(), response.getMsg()));
         }
     }
@@ -61,6 +58,7 @@ public abstract class BaseObserver<T> implements Observer<ApiResponse<T>> {
     public void onSubscribe(Disposable d) {
 
     }
+
 
     @Override
     public void onComplete() {

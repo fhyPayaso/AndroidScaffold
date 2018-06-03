@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
-
 import butterknife.ButterKnife;
 import cn.fhypayaso.androidscaffold.R;
 import cn.fhypayaso.androidscaffold.utils.InjectUtil;

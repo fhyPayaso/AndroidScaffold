@@ -16,6 +16,7 @@ public class MainActivity extends BaseToolBarActivity {
 
     @Override
     protected void initData(Bundle savedInstanceState) {
+
     }
 
     @Override

@@ -3,7 +3,6 @@ package cn.fhypayaso.androidscaffold.network;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import cn.fhypayaso.androidscaffold.App;
 import cn.fhypayaso.androidscaffold.common.CacheKey;
 import cn.fhypayaso.androidscaffold.common.Config;
 import cn.fhypayaso.androidscaffold.network.converter.ResponseConverterFactory;
