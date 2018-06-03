@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import cn.fhypayaso.androidscaffold.utils.InjectUtil;
 import cn.fhypayaso.androidscaffold.utils.ThreadUtil;
 import cn.fhypayaso.androidscaffold.utils.ToastUtil;
 
@@ -40,7 +39,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
             savedInstanceState) {
-        mView = inflater.inflate(InjectUtil.getContentViewId(getContext()), container, false);
+        mView = inflater.inflate(getLayoutId(), container, false);
         unbinder = ButterKnife.bind(this, mView);
         initFragment();
         return mView;
@@ -51,6 +50,13 @@ public abstract class BaseFragment extends Fragment {
         initData();
         initView();
     }
+
+    /**
+     * 绑定布局文件
+     *
+     * @return
+     */
+    protected abstract int getLayoutId();
 
     /**
      * 初始化View.

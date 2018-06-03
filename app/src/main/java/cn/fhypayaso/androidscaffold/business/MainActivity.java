@@ -4,15 +4,18 @@ import android.os.Bundle;
 
 import cn.fhypayaso.androidscaffold.R;
 import cn.fhypayaso.androidscaffold.base.activity.BaseToolBarActivity;
-import cn.fhypayaso.androidscaffold.base.activity.ContentView;
 
 /**
  * @author FanHongyu.
  * @since 18/5/31 20:01.
  * email fanhongyu@hrsoft.net.
  */
-@ContentView(R.layout.activity_main)
 public class MainActivity extends BaseToolBarActivity {
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
 
     @Override
     protected void initData(Bundle savedInstanceState) {
@@ -20,6 +23,7 @@ public class MainActivity extends BaseToolBarActivity {
 
     @Override
     protected void initView() {
+
 
     }
 }

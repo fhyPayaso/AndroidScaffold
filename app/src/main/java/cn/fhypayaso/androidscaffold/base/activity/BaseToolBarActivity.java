@@ -12,11 +12,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
-
 import butterknife.ButterKnife;
 import cn.fhypayaso.androidscaffold.R;
-import cn.fhypayaso.androidscaffold.utils.InjectUtil;
+
 
 /**
  * @author FanHongyu.
@@ -47,7 +45,7 @@ public abstract class BaseToolBarActivity extends BaseActivity {
         LayoutInflater inflater = getLayoutInflater();
         RelativeLayout viewRoot = (RelativeLayout) inflater.inflate(R.layout.view_base_toolbar, null);
         FrameLayout viewContainer = viewRoot.findViewById(R.id.view_container);
-        viewContainer.addView(inflater.inflate(InjectUtil.getContentViewId(this), null));
+        viewContainer.addView(inflater.inflate(getLayoutId(), null));
         initToolbar(viewRoot);
         return viewRoot;
     }

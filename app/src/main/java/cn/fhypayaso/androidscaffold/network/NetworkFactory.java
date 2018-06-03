@@ -57,8 +57,6 @@ public final class NetworkFactory {
                     .baseUrl(Config.APP_SERVER_BASE_URL)
                     //增加对返回值为自定义Response类型的支持,默认是Gson
                     .addConverterFactory(ResponseConverterFactory.create())
-                    //增加对RxJava的适配
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
         }
         return sRetrofit;

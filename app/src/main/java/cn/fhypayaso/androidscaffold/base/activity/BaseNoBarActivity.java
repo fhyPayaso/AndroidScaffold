@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import butterknife.ButterKnife;
-import cn.fhypayaso.androidscaffold.utils.InjectUtil;
+
 
 /**
  * @author fhyPayaso
@@ -17,8 +17,7 @@ public abstract class BaseNoBarActivity extends BaseActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        InjectUtil.getContentViewId(this);
-        //setContentView(getLayoutId());
+        setContentView(getLayoutId());
         ButterKnife.bind(this);
         initActivity(savedInstanceState);
     }
