@@ -12,13 +12,13 @@ public class Config {
     /**
      * 当前app版本号
      */
-    public static final String APP_VERSION = "1.0.3";
+    public static final String APP_VERSION = "";
 
 
     /**
      * 网络请求BaseURL
      */
-    public static final String APP_SERVER_BASE_URL = "http://taskgobe.sealbaby.cn/";
+    public static final String APP_SERVER_BASE_URL = "";
 
 
     /**
@@ -36,6 +36,6 @@ public class Config {
     /**
      * 正确返回码
      */
-    public static final int[] NET_CORRECT_CODE = {1000, 2000, 3000, 4000};
+    public static final int[] NET_CORRECT_CODE = {1000};
 
 }

@@ -17,8 +17,6 @@ import cn.fhypayaso.androidscaffold.base.activity.ContentView;
 public class InjectUtil {
 
 
-    private static final String TAG = "InjectUtil";
-
     /**
      * 注入界面布局
      *
@@ -29,7 +27,6 @@ public class InjectUtil {
         //拿到注解
         ContentView contentView = clazz.getAnnotation(ContentView.class);
         if (contentView == null) {
-            Log.i(TAG, "getLayoutId: ======");
             return -1;
         }
         return contentView.value();

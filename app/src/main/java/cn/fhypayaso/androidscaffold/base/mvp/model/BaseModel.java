@@ -18,9 +18,5 @@ import cn.fhypayaso.androidscaffold.base.mvp.impl.INotifyListener;
  */
 public abstract class BaseModel implements IBaseContract.IBaseModel {
 
-    /**
-     * 维护每一个Presenter所对应的回调
-     */
-    protected Map<IBaseContract.IBasePresenter, List<INotifyListener>> mListenerMap;
 
 }
