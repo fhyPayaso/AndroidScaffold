@@ -14,6 +14,12 @@ public interface IBaseContract {
     interface IBasePresenter {
 
         /**
+         * 与V层进行绑定
+         * @param view
+         */
+        void bindView(IBaseView view);
+
+        /**
          * p层与v层解绑
          */
         void unBindView();

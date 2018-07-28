@@ -5,6 +5,10 @@ import android.content.Context;
 import android.util.Log;
 
 import cn.fhypayaso.androidscaffold.base.activity.ContentView;
+import cn.fhypayaso.androidscaffold.base.mvp.impl.IBaseContract;
+import cn.fhypayaso.androidscaffold.base.mvp.impl.RegisterPresenter;
+
+import static android.support.constraint.Constraints.TAG;
 
 /**
  * 注解工具类
@@ -30,5 +34,21 @@ public class InjectUtil {
             return -1;
         }
         return contentView.value();
+    }
+
+
+    /**
+     * 创建presenter实例
+     * @param context
+     */
+    public static IBaseContract.IBasePresenter registerPresenter(Context context) throws IllegalAccessException, InstantiationException {
+        Class<? extends Context> contextClass = context.getClass();
+        RegisterPresenter registerPresenter = contextClass.getAnnotation(RegisterPresenter.class);
+        if(registerPresenter != null) {
+            Class presenterClass = registerPresenter.value();
+            return (IBaseContract.IBasePresenter) presenterClass.newInstance();
+        } else {
+            throw new NullPointerException("请在V层注册Presenter");
+        }
     }
 }

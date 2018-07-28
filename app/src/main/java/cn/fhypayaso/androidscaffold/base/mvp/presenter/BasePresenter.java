@@ -12,10 +12,12 @@ public abstract class BasePresenter<V extends IBaseContract.IBaseView> implement
 
     protected V mView;
 
-    public BasePresenter(V view) {
-        mView = view;
-    }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public void bindView(IBaseContract.IBaseView view) {
+        this.mView = (V) view;
+    }
 
     /**
      * 解绑v层

@@ -17,8 +17,7 @@ public abstract class BaseNoBarActivity extends BaseActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        InjectUtil.getContentViewId(this);
-        //setContentView(getLayoutId());
+        setContentView(InjectUtil.getContentViewId(this));
         ButterKnife.bind(this);
         initActivity(savedInstanceState);
     }
