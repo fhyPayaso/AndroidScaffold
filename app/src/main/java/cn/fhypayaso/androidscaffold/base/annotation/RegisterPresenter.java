@@ -1,9 +1,11 @@
-package cn.fhypayaso.androidscaffold.base.mvp.impl;
+package cn.fhypayaso.androidscaffold.base.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import cn.fhypayaso.androidscaffold.base.mvp.impl.IBaseContract;
 
 
 /**

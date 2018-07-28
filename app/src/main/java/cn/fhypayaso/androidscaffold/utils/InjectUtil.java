@@ -1,14 +1,11 @@
 package cn.fhypayaso.androidscaffold.utils;
 
 import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 
-import cn.fhypayaso.androidscaffold.base.activity.ContentView;
+import cn.fhypayaso.androidscaffold.base.annotation.ContentView;
 import cn.fhypayaso.androidscaffold.base.mvp.impl.IBaseContract;
-import cn.fhypayaso.androidscaffold.base.mvp.impl.RegisterPresenter;
-
-import static android.support.constraint.Constraints.TAG;
+import cn.fhypayaso.androidscaffold.base.annotation.RegisterPresenter;
 
 /**
  * 注解工具类
@@ -24,26 +21,51 @@ public class InjectUtil {
     /**
      * 注入界面布局
      *
-     * @param context
+     * @param activity
      */
-    public static int getContentViewId(Context context) {
-        Class<? extends Context> clazz = context.getClass();
+    public static int getContentViewId(Activity activity) {
+        return getIdFromAnnotation(activity.getClass());
+    }
+
+    /**
+     * 注入界面布局
+     *
+     * @param fragment
+     */
+    public static int getContentViewId(Fragment fragment) {
+        return getIdFromAnnotation(fragment.getClass());
+    }
+
+    private static int getIdFromAnnotation(Class clazz) {
         //拿到注解
-        ContentView contentView = clazz.getAnnotation(ContentView.class);
+        ContentView contentView = (ContentView) clazz.getAnnotation(ContentView.class);
         if (contentView == null) {
-            return -1;
+            throw new NullPointerException("请绑定布局文件");
         }
         return contentView.value();
     }
 
 
+
+
     /**
-     * 创建presenter实例
-     * @param context
+     * activity创建presenter实例
+     * @param activity
      */
-    public static IBaseContract.IBasePresenter registerPresenter(Context context) throws IllegalAccessException, InstantiationException {
-        Class<? extends Context> contextClass = context.getClass();
-        RegisterPresenter registerPresenter = contextClass.getAnnotation(RegisterPresenter.class);
+    public static IBaseContract.IBasePresenter registerPresenter(Activity activity) throws IllegalAccessException, InstantiationException {
+        return createPresenterInstance(activity.getClass());
+    }
+
+    /**
+     * fragment创建presenter实例
+     * @param fragment
+     */
+    public static IBaseContract.IBasePresenter registerPresenter(Fragment fragment) throws IllegalAccessException, InstantiationException {
+        return createPresenterInstance(fragment.getClass());
+    }
+
+    private static IBaseContract.IBasePresenter createPresenterInstance(Class clazz) throws IllegalAccessException, InstantiationException {
+        RegisterPresenter registerPresenter = (RegisterPresenter) clazz.getAnnotation(RegisterPresenter.class);
         if(registerPresenter != null) {
             Class presenterClass = registerPresenter.value();
             return (IBaseContract.IBasePresenter) presenterClass.newInstance();
@@ -51,4 +73,6 @@ public class InjectUtil {
             throw new NullPointerException("请在V层注册Presenter");
         }
     }
+
+
 }

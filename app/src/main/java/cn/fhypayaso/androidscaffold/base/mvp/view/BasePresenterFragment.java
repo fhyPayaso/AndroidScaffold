@@ -35,7 +35,7 @@ public abstract class BasePresenterFragment<P extends IBaseContract.IBasePresent
      */
     @SuppressWarnings("unchecked")
     private void initPresenter() throws java.lang.InstantiationException, IllegalAccessException {
-        mPresenter = (P) InjectUtil.registerPresenter(getContext());
+        mPresenter = (P) InjectUtil.registerPresenter(this);
         mPresenter.bindView(this);
     }
 

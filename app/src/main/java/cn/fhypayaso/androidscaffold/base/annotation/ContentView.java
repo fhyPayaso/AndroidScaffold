@@ -1,4 +1,4 @@
-package cn.fhypayaso.androidscaffold.base.activity;
+package cn.fhypayaso.androidscaffold.base.annotation;
 
 import android.support.annotation.LayoutRes;
 

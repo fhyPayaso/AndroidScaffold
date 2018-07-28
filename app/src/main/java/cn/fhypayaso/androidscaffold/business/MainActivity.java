@@ -2,13 +2,10 @@ package cn.fhypayaso.androidscaffold.business;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.view.ViewGroup;
 
 import cn.fhypayaso.androidscaffold.R;
-import cn.fhypayaso.androidscaffold.base.activity.BaseToolBarActivity;
-import cn.fhypayaso.androidscaffold.base.activity.ContentView;
-import cn.fhypayaso.androidscaffold.base.mvp.impl.RegisterPresenter;
+import cn.fhypayaso.androidscaffold.base.annotation.ContentView;
+import cn.fhypayaso.androidscaffold.base.annotation.RegisterPresenter;
 import cn.fhypayaso.androidscaffold.base.mvp.view.BasePresenterActivity;
 import cn.fhypayaso.androidscaffold.utils.ToastUtil;
 
