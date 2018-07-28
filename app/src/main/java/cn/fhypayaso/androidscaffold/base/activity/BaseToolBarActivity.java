@@ -45,7 +45,7 @@ public abstract class BaseToolBarActivity extends BaseActivity {
         LayoutInflater inflater = getLayoutInflater();
         RelativeLayout viewRoot = (RelativeLayout) inflater.inflate(R.layout.view_base_toolbar, null);
         FrameLayout viewContainer = viewRoot.findViewById(R.id.view_container);
-        viewContainer.addView(inflater.inflate(InjectUtil.getContentViewId(this), null));
+        viewContainer.addView(inflater.inflate(InjectUtil.getContentViewId(this.getClass()), null));
         initToolbar(viewRoot);
         return viewRoot;
     }

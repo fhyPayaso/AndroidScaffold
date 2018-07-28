@@ -35,7 +35,7 @@ public abstract class BasePresenterActivity<P extends IBaseContract.IBasePresent
      */
     @SuppressWarnings("unchecked")
     private void initPresenter() throws IllegalAccessException, InstantiationException {
-        mPresenter = (P) InjectUtil.registerPresenter(this);
+        mPresenter = (P) InjectUtil.registerPresenter(this.getClass());
         mPresenter.bindView(this);
     }
 

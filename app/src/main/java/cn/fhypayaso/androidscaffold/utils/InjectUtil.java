@@ -18,25 +18,7 @@ import cn.fhypayaso.androidscaffold.base.annotation.RegisterPresenter;
 public class InjectUtil {
 
 
-    /**
-     * 注入界面布局
-     *
-     * @param activity
-     */
-    public static int getContentViewId(Activity activity) {
-        return getIdFromAnnotation(activity.getClass());
-    }
-
-    /**
-     * 注入界面布局
-     *
-     * @param fragment
-     */
-    public static int getContentViewId(Fragment fragment) {
-        return getIdFromAnnotation(fragment.getClass());
-    }
-
-    private static int getIdFromAnnotation(Class clazz) {
+    public static int getContentViewId(Class clazz) {
         //拿到注解
         ContentView contentView = (ContentView) clazz.getAnnotation(ContentView.class);
         if (contentView == null) {
@@ -45,26 +27,7 @@ public class InjectUtil {
         return contentView.value();
     }
 
-
-
-
-    /**
-     * activity创建presenter实例
-     * @param activity
-     */
-    public static IBaseContract.IBasePresenter registerPresenter(Activity activity) throws IllegalAccessException, InstantiationException {
-        return createPresenterInstance(activity.getClass());
-    }
-
-    /**
-     * fragment创建presenter实例
-     * @param fragment
-     */
-    public static IBaseContract.IBasePresenter registerPresenter(Fragment fragment) throws IllegalAccessException, InstantiationException {
-        return createPresenterInstance(fragment.getClass());
-    }
-
-    private static IBaseContract.IBasePresenter createPresenterInstance(Class clazz) throws IllegalAccessException, InstantiationException {
+    public static IBaseContract.IBasePresenter registerPresenter(Class clazz) throws IllegalAccessException, InstantiationException {
         RegisterPresenter registerPresenter = (RegisterPresenter) clazz.getAnnotation(RegisterPresenter.class);
         if(registerPresenter != null) {
             Class presenterClass = registerPresenter.value();
@@ -73,6 +36,5 @@ public class InjectUtil {
             throw new NullPointerException("请在V层注册Presenter");
         }
     }
-
 
 }
