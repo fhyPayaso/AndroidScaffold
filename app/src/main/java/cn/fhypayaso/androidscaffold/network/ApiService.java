@@ -3,6 +3,7 @@ package cn.fhypayaso.androidscaffold.network;
 
 import cn.fhypayaso.androidscaffold.network.response.ApiResponse;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 /**
@@ -12,5 +13,7 @@ import retrofit2.http.POST;
  */
 public interface ApiService {
 
+    @POST("")
+    Call<ApiResponse<String>> login();
 
 }
